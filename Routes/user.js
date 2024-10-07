@@ -1,7 +1,7 @@
 const {Router} = require("express");
 const jwt = require("jsonwebtoken");
 const {userModel} = require("../db");
-const JWT_USER_PASSWORD = "kya-re-bhadwe!"
+const {JWT_USER_PASSWORD} = require("../config");
 const userRouter = Router();
 userRouter.post("/signup", async function(req,res){
     const {email,password,firstname,lastname} = req.body;// add zod validation
@@ -53,5 +53,6 @@ userRouter.get("/purchases", function(req,res){
 })
 
 module.exports = {
-    userRouter:userRouter
+    userRouter:userRouter,
+    
 }

@@ -1,11 +1,12 @@
 const {Router} = require("express");
-const { adminModel } = require("../db");
+const { adminModel, courseModel } = require("../db");
 const jwt = require("jsonwebtoken");
 // bcrypt ,zod , jwt 
 
 const adminRouter = Router();
 
-const JWT_ADMIN_PASSWORD = "teriii-mkc";
+const {JWT_ADMIN_PASSWORD} = require("../config");
+const adminMiddleware = require("../middlewares/adminMiddleware");
 adminRouter.post("/signup", async function(req,res){
     const {email,password,firstname,lastname} = req.body;// add zod validation
     // hash the password : do at home before storing in db
@@ -50,8 +51,17 @@ adminRouter.post("/signin", async function(req,res){
 })
 
 
-adminRouter.post("/",function (req,res){
+adminRouter.post("/course",adminMiddleware,async function (req,res){
+    const adminId = req.userId;
+    const { title,description,imageUrl,price} = req.body;
 
+    const course = await courseModel.create({
+        title,description,imageUrl,price,creatorId:adminId
+    })
+    res.json({
+        message : "course created!",
+        courseId : course._id
+    })
 })
 
 adminRouter.put("/",function (req,res){
