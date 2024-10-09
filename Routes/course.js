@@ -1,10 +1,13 @@
 const {Router} = require("express");
 const {userMiddleware} = require("../middlewares/userMiddleware");
 const user = require("./user");
-const { userModel, purchasesModel } = require("../db");
+const { userModel, purchasesModel, courseModel } = require("../db");
 const courseRouter = Router();
-courseRouter.get("/preview",userMiddleware, function(req,res){
-    
+courseRouter.get("/preview", async function(req,res){
+    const courses= await courseModel.find({});
+    res.json({
+        courses
+    })
 })
 
 courseRouter.post("/purchase", userMiddleware,async function(req,res){
